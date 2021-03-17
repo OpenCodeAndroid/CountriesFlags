@@ -1,7 +1,7 @@
 .DS_Store
 
 # https://raw.githubusercontent.com/github/gitignore/master/Android.gitignore
-# // TODO remove duplications
+# // TODO remove possible duplications
 # Built application files
 *.apk
 *.aar

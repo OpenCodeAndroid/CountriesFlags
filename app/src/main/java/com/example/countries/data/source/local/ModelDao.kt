@@ -14,10 +14,7 @@ class ModelDao {
         var name: String = "",
         var capital: String = "",
         var flag: String = ""
-    ) {
-
-        // TODO val isEmpty get() = name.isEmpty()
-    }
+    )
 
     // https://developer.android.com/training/data-storage/room/relationships
     data class CountryWithCurrencies @JvmOverloads constructor(

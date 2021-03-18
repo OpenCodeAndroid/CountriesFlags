@@ -16,7 +16,6 @@ class CountriesLocalDataSource internal constructor(
             Result.Success(countriesDao.getCountriesWithCurrencies().map {
                 it.mapToModel()
             })
-            // TODO create app model layer and map CountriesWithCurrencies to Countries (... data... , currencies)
         } catch (e: Exception) {
             Result.Error(e)
         }

@@ -31,7 +31,7 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
-ext{
+ext {
     roomVersion = '2.2.6'
     coroutinesVersion = '1.2.1'
     archTestingVersion = '2.1.0'
@@ -39,4 +39,21 @@ ext{
     androidXTestExtKotlinRunnerVersion = '1.1.2'
     androidXTestRulesVersion = '1.4.0-alpha05'
     fragmentVersion = '1.3.1'
+    koinVersion = '2.2.2'
+    retrofitVersion = ''
+    retrofitVersion = '2.6.0'
+    coreKtxVersion = '1.3.2'
+    appCompatVersion = '1.2.0'
+    materialVersion = '1.3.0'
+    androidxTestRunerVersion = '1.3.0'
+    gsonVersion = '2.8.6'
+    retrofitGsonConverterVersion = '2.5.0'
+    constraintLayoutVersion = '2.0.4'
+    legacySupportVersion = '1.0.0'
+    recyclerview = '1.1.0'
+    lifecycleVersion = '2.3.0'
+    navigationComposeVersion = '1.0.0-alpha09'
+    robolectricVersion = '4.5.1'
+    androidxTestExtVersion = '1.1.2'
+    espressoVersion = '3.3.0'
 }

@@ -6,14 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import com.example.countries.R
+import org.koin.android.ext.android.inject
 
 class CountryDetailFragment : Fragment() {
 
     private val args: CountryDetailFragmentArgs by navArgs()
-    private lateinit var viewModel: CountryDetailViewModel
+    private val viewModel: CountryDetailViewModel by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -23,12 +23,12 @@ class CountryDetailFragment : Fragment() {
         return inflater.inflate(R.layout.country_detail_fragment, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(CountryDetailViewModel::class.java)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         viewModel.start(args.countryId)
         setupObservers()
     }
+
     private fun setupObservers() {
         viewModel.dataCountry.observe(this.viewLifecycleOwner) {
             Toast.makeText(this.context, it.toString(), Toast.LENGTH_LONG).show()

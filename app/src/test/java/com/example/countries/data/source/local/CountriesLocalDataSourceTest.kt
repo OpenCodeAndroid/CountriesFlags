@@ -19,6 +19,8 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.koin.core.context.stopKoin
+import org.koin.test.KoinTest
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
@@ -29,7 +31,7 @@ import org.robolectric.annotation.Config
 @RunWith(RobolectricTestRunner::class)
 @MediumTest
 @Config(sdk = [Build.VERSION_CODES.O_MR1])
-class CountriesLocalDataSourceTest {
+class CountriesLocalDataSourceTest : KoinTest {
 
     private lateinit var localDataSource: CountriesLocalDataSource
     private lateinit var database: CountriesDatabase
@@ -45,7 +47,6 @@ class CountriesLocalDataSourceTest {
 
     @Before
     fun setup() {
-        // using an in-memory database for testing, since it doesn't survive killing the process
         database = Room.inMemoryDatabaseBuilder(
             ApplicationProvider.getApplicationContext(),
             CountriesDatabase::class.java
@@ -58,6 +59,7 @@ class CountriesLocalDataSourceTest {
     @After
     fun cleanUp() {
         database.close()
+        stopKoin()
     }
 
     @Test

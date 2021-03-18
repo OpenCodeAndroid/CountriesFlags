@@ -7,6 +7,8 @@ data class Country(
     val flagUrl: String,
     val isoCode: String
 ) {
+    val isEmpty get() = name.isEmpty() || capital.isEmpty() || flagUrl.isEmpty()
+
     data class Currency(
         val code: String,
         val name: String,

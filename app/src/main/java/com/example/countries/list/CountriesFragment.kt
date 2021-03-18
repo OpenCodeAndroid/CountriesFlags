@@ -6,19 +6,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.countries.EventObserver
 import com.example.countries.R
+import org.koin.android.ext.android.inject
 
 /**
  * A fragment representing a list of Items.
  */
 class CountriesFragment : Fragment() {
 
-    private lateinit var viewModel: CountriesViewModel
+    private val viewModel: CountriesViewModel by inject()
     private lateinit var countriesAdapter: CountriesRecyclerViewAdapter
 
         override fun onCreateView(
@@ -27,7 +27,6 @@ class CountriesFragment : Fragment() {
             savedInstanceState: Bundle?
         ): View? {
         val view = inflater.inflate(R.layout.fragment_countries_list, container, false)
-        viewModel = ViewModelProvider(this).get(CountriesViewModel::class.java)
         // Set the adapter
         if (view is RecyclerView) {
             with(view) {
@@ -40,8 +39,8 @@ class CountriesFragment : Fragment() {
         return view
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         setupNavigation()
         viewModel.start()
         setupObservers()

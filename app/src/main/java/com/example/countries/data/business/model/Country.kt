@@ -12,6 +12,6 @@ data class Country(
     data class Currency(
         val code: String,
         val name: String,
-        val symbol: String
+        val symbol: String?
     )
 }

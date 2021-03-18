@@ -90,6 +90,8 @@ dependencies {
     implementation "org.koin:koin-android-viewmodel:$koinVersion"
     implementation "org.koin:koin-android-ext:$koinVersion"
 
+    implementation "com.jakewharton.timber:timber:$timberVersion"
+
     // Testing //
     testImplementation "junit:junit:4.13.2"
     testImplementation "androidx.arch.core:core-testing:$archTestingVersion"
@@ -99,6 +101,9 @@ dependencies {
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion"
 
     testImplementation "org.robolectric:robolectric:$robolectricVersion"
+
+    //  Mockito framework
+    testImplementation 'org.mockito:mockito-core:3.2.4'
 
     // AndroidX Test - JVM testing
     testImplementation "androidx.test:core-ktx:$androidXTestCoreVersion"

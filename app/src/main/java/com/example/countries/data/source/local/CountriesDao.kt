@@ -26,9 +26,9 @@ interface CountriesDao {
     suspend fun getCountries(): List<Country>
 
     /**
-     * Insert a CountryWithCurrencies in the database. If the task already exists, replace it.
+     * Insert a CountryWithCurrencies in the database. If the country already exists, replace it.
      *
-     * @param CountryWithCurrencies the Country With Currencies to be inserted.
+     * @param countryWithCurrenciesList the Country With Currencies to be inserted.
      */
     @Transaction
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -48,17 +48,17 @@ interface CountriesDao {
     suspend fun insertCountryCurrencyCrossRef(countryCurrencyCrossRef: ModelDao.CountryCurrencyCrossRef)
 
     /**
-     * Insert a country in the database. If the task already exists, replace it.
+     * Insert a country in the database. If the country already exists, replace it.
      *
-     * @param task the country to be inserted.
+     * @param country the country to be inserted.
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCountry(country: Country)
 
     /**
-     * Insert a country in the database. If the task already exists, replace it.
+     * Insert a country in the database. If the country already exists, replace it.
      *
-     * @param task the country to be inserted.
+     * @param currency the country to be inserted.
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCurrency(currency: Currency)
@@ -102,4 +102,25 @@ interface CountriesDao {
     @Transaction
     @Query("DELETE FROM Countries")
     suspend fun deleteCountries()
+
+    /**
+     * Delete all currencies.
+     */
+    @Transaction
+    @Query("DELETE FROM Currencies")
+    suspend fun deleteCurrencies()
+
+    /**
+     * Delete all currencies.
+     */
+    @Transaction
+    @Query("DELETE FROM CountryCurrencyCrossRef")
+    suspend fun deleteCountryCurrencyCrossRef()
+
+    @Transaction
+    suspend fun deleteAll() {
+        deleteCountries()
+        deleteCurrencies()
+        deleteCountryCurrencyCrossRef()
+    }
 }

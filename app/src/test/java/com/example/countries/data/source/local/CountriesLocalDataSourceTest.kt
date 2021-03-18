@@ -25,7 +25,7 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
 /**
- * Integration test for the [CountriesDataSource].
+ * Integration test for the CountriesDataSource.
  */
 @ExperimentalCoroutinesApi
 @RunWith(RobolectricTestRunner::class)
@@ -63,7 +63,7 @@ class CountriesLocalDataSourceTest : KoinTest {
     }
 
     @Test
-    fun saveTask_retrievesTask() = runBlockingTest {
+    fun saveCountry_retrievesCountry() = runBlockingTest {
         // GIVEN - a new country saved in the database
 
         val currencies = listOf(
@@ -99,7 +99,7 @@ class CountriesLocalDataSourceTest : KoinTest {
     }
 
     @Test
-    fun saveTask_retrievesTaskMultiple() = runBlockingTest {
+    fun saveCountries_retrievesMultiple() = runBlockingTest {
         // GIVEN - 2 new country saved in the database
 
         val currencies = listOf(
@@ -138,7 +138,7 @@ class CountriesLocalDataSourceTest : KoinTest {
         // WHEN  - Countries retrieved
         val result = localDataSource.getCountries()
 
-        // THEN - Same task is returned
+        // THEN - Same Countries is returned
         assertThat(result.succeeded, CoreMatchers.`is`(true))
         result as Result.Success
         assertThat(result.data[0].isoCode, CoreMatchers.`is`("har"))

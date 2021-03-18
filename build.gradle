@@ -56,4 +56,5 @@ ext {
     robolectricVersion = '4.5.1'
     androidxTestExtVersion = '1.1.2'
     espressoVersion = '3.3.0'
+    timberVersion = '4.7.1'
 }

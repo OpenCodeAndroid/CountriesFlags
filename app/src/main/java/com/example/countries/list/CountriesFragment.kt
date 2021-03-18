@@ -47,7 +47,7 @@ class CountriesFragment : Fragment() {
     }
 
     private fun setupNavigation() {
-        viewModel.openTaskEvent.observe(this.viewLifecycleOwner, EventObserver { id ->
+        viewModel.openCountryEvent.observe(this.viewLifecycleOwner, EventObserver { id ->
             openCountryDetails(id)
         })
     }

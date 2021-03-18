@@ -37,6 +37,6 @@ class ModelDao {
     data class Currency(
         @PrimaryKey val code: String = UUID.randomUUID().toString(),
         val name: String,
-        val symbol: String
+        val symbol: String?
     )
 }

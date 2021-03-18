@@ -14,12 +14,12 @@ For support, please feel free to contact me at https://www.linkedin.com/in/syeda
 
 data class CountryDto(
 
-    @SerializedName("name") val name: String,
+    @SerializedName("name") val name: String?,
     @SerializedName("topLevelDomain") val topLevelDomain: List<String>,
     @SerializedName("alpha2Code") val alpha2Code: String,
     @SerializedName("alpha3Code") val alpha3Code: String,
     @SerializedName("callingCodes") val callingCodes: List<String>,
-    @SerializedName("capital") val capital: String,
+    @SerializedName("capital") val capital: String?,
     @SerializedName("altSpellings") val altSpellings: List<String>,
     @SerializedName("region") val region: String,
     @SerializedName("subregion") val subregion: String,
@@ -35,7 +35,7 @@ data class CountryDto(
     @SerializedName("currencies") val currencies: List<CurrencyDto>,
     @SerializedName("languages") val languages: List<LanguageDto>,
     @SerializedName("translations") val translations: TranslationsDto,
-    @SerializedName("flag") val flag: String,
+    @SerializedName("flag") val flag: String?,
     @SerializedName("regionalBlocs") val regionalBlocs: List<RegionalBlocDto>,
-    @SerializedName("cioc") val cioc: String
+    @SerializedName("cioc") val cioc: String?
 )

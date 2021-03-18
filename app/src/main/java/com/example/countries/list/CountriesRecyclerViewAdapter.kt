@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.countries.R
+import com.example.countries.data.business.model.Country
 import com.example.countries.dummy.DummyContent.DummyItem
 
 /**
@@ -13,7 +14,7 @@ import com.example.countries.dummy.DummyContent.DummyItem
  * TODO: Replace the implementation with code for your data type.
  */
 class CountriesRecyclerViewAdapter(
-    private var values: List<DummyItem> = emptyList(),
+    private var values: List<Country> = emptyList(),
     val onClick: (String) -> Unit
 ) : RecyclerView.Adapter<CountriesRecyclerViewAdapter.ViewHolder>() {
 
@@ -25,10 +26,10 @@ class CountriesRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
-        holder.idView.text = item.id
-        holder.contentView.text = item.content
+        holder.idView.text = item.countryId
+        holder.contentView.text = item.capital
         holder.contentView.setOnClickListener {
-            onClick(item.id)
+            onClick(item.countryId)
         }
     }
 
@@ -43,7 +44,7 @@ class CountriesRecyclerViewAdapter(
         }
     }
 
-    fun updateList(list: List<DummyItem>) {
+    fun updateList(list: List<Country>) {
         values = list
     }
 }

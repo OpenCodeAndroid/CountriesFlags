@@ -10,7 +10,8 @@ import java.util.UUID
 class ModelDao {
     @Entity(tableName = "countries")
     data class Country @JvmOverloads constructor(
-        @PrimaryKey var cioc: String = UUID.randomUUID().toString(),
+        @PrimaryKey var countryId: String = UUID.randomUUID().toString(),
+        var cioc: String = "",
         var name: String = "",
         var capital: String = "",
         var flag: String = ""
@@ -20,23 +21,24 @@ class ModelDao {
     data class CountryWithCurrencies @JvmOverloads constructor(
         @Embedded val countries: Country = Country(),
         @Relation(
-                parentColumn = "cioc",
-                entityColumn = "code",
+                parentColumn = "countryId",
+                entityColumn = "currencyId",
                 associateBy = Junction(CountryCurrencyCrossRef::class)
         )
         var currencies: List<Currency> = emptyList()
     )
 
-    @Entity(primaryKeys = ["cioc", "code"])
+    @Entity(primaryKeys = ["countryId", "currencyId"])
     data class CountryCurrencyCrossRef(
-        val cioc: String,
-        val code: String
+        val countryId: String,
+        val currencyId: String
     )
 
     @Entity(tableName = "currencies")
     data class Currency(
-        @PrimaryKey val code: String = UUID.randomUUID().toString(),
+        @PrimaryKey val currencyId: String = UUID.randomUUID().toString(),
+        val code: String,
         val name: String,
-        val symbol: String?
+        val symbol: String
     )
 }

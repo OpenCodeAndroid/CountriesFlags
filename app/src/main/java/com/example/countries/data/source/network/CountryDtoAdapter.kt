@@ -7,21 +7,28 @@ import com.example.countries.data.source.network.dto.CurrencyDto
 object CountryDtoAdapter {
     fun mapToCountry(countryDto: CountryDto): Country =
         Country(
-            name = countryDto.name,
-            capital = countryDto.capital,
-            flagUrl = countryDto.flag,
-            isoCode = countryDto.cioc,
+            countryId = countryDto.hashCode().toString(),
+            name = countryDto.name.orEmpty(),
+            capital = countryDto.capital.orEmpty(),
+            flagUrl = countryDto.flag.orEmpty(),
+            isoCode = countryDto.cioc.orEmpty(),
             currencies = mapToCurrency(countryDto.currencies)
         )
 
-    fun mapToCurrency(currencyDtoList: List<CurrencyDto>): List<Country.Currency> =
+    private fun mapToCurrency(currencyDtoList: List<CurrencyDto>): List<Country.Currency> =
         currencyDtoList.map { currencyDto ->
             Country.Currency(
-                name = currencyDto.name,
-                code = currencyDto.code,
-                symbol = currencyDto.symbol
+                currencyId = currencyDto.hashCode().toString(),
+                name = currencyDto.name.orEmpty(),
+                code = currencyDto.code.orEmpty(),
+                symbol = currencyDto.symbol.orEmpty()
             )
         }
 }
+
+// val countryId = UUID.randomUUID().toString()
+// val currencyId =  if (currency.code.isNotEmpty()) currency.code else  UUID.randomUUID().toString()
+//
+// insertCurrency(currency.copy(currencyId = currencyId))
 
 fun CountryDto.mapToModel() = CountryDtoAdapter.mapToCountry(this)

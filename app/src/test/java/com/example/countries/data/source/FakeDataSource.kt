@@ -20,6 +20,7 @@ import com.example.countries.data.Result
 import com.example.countries.data.Result.Error
 import com.example.countries.data.Result.Success
 import com.example.countries.data.business.model.Country
+import java.lang.NullPointerException
 
 class FakeDataSource(var countries: MutableList<Country>? = mutableListOf()) : CountriesDataSource {
     override suspend fun getCountries(): Result<List<Country>> {
@@ -29,8 +30,30 @@ class FakeDataSource(var countries: MutableList<Country>? = mutableListOf()) : C
         )
     }
 
+    override suspend fun getCountry(countryId: String): Result<Country> {
+        val item = countries?.first { it.countryId == countryId }
+        return if (item == null) {
+            Error(NullPointerException("Country not found"))
+        } else {
+            Success(item)
+        }
+    }
+
+    override suspend fun getCountryByName(name: String): Result<Country> {
+        val item = countries?.first { it.name == name }
+        return if (item == null) {
+            Error(NullPointerException("Country not found"))
+        } else {
+            Success(item)
+        }
+    }
+
     override suspend fun save(countryList: List<Country>) {
         countries?.addAll(countryList)
+    }
+
+    override suspend fun saveCountry(country: Country) {
+        countries?.add(country)
     }
 
     override suspend fun deleteAllCountries() {

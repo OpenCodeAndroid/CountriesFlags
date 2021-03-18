@@ -44,6 +44,55 @@ class DefaultCountriesRepository(
         }
     }
 
+    override suspend fun getCountry(countryId: String, forceUpdate: Boolean): Result<Country> {
+        return withContext(ioDispatcher) {
+            // Respond immediately with cache if available
+            if (!forceUpdate) {
+                getCountryWithId(countryId)?.let {
+                    return@withContext Success(it)
+                }
+            }
+
+            val newTask = fetchCountryFromRemoteOrLocal(countryId, forceUpdate)
+
+            // Refresh the cache with the new tasks
+            (newTask as? Success)?.let {
+                cacheCountry(it.data)
+            }
+
+            return@withContext newTask
+        }
+    }
+
+    private suspend fun fetchCountryFromRemoteOrLocal(
+        countryId: String,
+        forceUpdate: Boolean
+    ): Result<Country> {
+        // Remote first
+        getCountryWithId(countryId)?.let {
+            when (val remoteCountry = remoteDataSource.getCountryByName(it.name)) {
+                is Error -> Timber.w("Remote data source fetch failed")
+                is Success -> {
+                    refreshLocalDataSource(remoteCountry.data)
+                    return remoteCountry
+                }
+                else -> throw IllegalStateException()
+            }
+        }
+
+        // Don't read from local if it's forced
+        if (forceUpdate) {
+            return Error(Exception("Refresh failed"))
+        }
+
+        // Local if remote fails
+        val localTasks = localDataSource.getCountry(countryId)
+        if (localTasks is Success) return localTasks
+        return Error(Exception("Error fetching from remote and local"))
+    }
+
+    private fun getCountryWithId(id: String) = cachedCountries?.get(id)
+
     override suspend fun save(countryList: List<Country>) {
         TODO("Not yet implemented")
     }
@@ -86,18 +135,22 @@ class DefaultCountriesRepository(
         localDataSource.save(countries)
     }
 
+    private suspend fun refreshLocalDataSource(country: Country) {
+        localDataSource.saveCountry(country)
+    }
+
     private fun cacheAndPerform(country: Country, perform: (Country) -> Unit) {
         val cacheCountry = cacheCountry(country)
         perform(cacheCountry)
     }
 
     private fun cacheCountry(country: Country): Country {
-        val newCountry = country.copy() // TODO check if it is necessary
+        val newCountry = country.copy()
         // Create if it doesn't exist.
         if (cachedCountries == null) {
             cachedCountries = ConcurrentHashMap()
         }
-        cachedCountries?.put(newCountry.isoCode, newCountry)
+        cachedCountries?.put(newCountry.countryId, newCountry)
         return newCountry
     }
 }

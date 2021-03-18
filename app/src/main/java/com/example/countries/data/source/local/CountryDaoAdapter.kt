@@ -5,6 +5,7 @@ import com.example.countries.data.business.model.Country
 object CountryDaoAdapter {
     fun mapToCountry(daoCountry: ModelDao.CountryWithCurrencies): Country =
         Country(
+            countryId = daoCountry.countries.countryId,
             name = daoCountry.countries.name,
             capital = daoCountry.countries.capital,
             flagUrl = daoCountry.countries.flag,
@@ -15,6 +16,7 @@ object CountryDaoAdapter {
     fun mapToCurrency(currencyDaoList: List<ModelDao.Currency>): List<Country.Currency> =
         currencyDaoList.map { currencyDto ->
             Country.Currency(
+                currencyId = currencyDto.currencyId,
                 name = currencyDto.name,
                 code = currencyDto.code,
                 symbol = currencyDto.symbol
@@ -24,6 +26,7 @@ object CountryDaoAdapter {
     fun mapToCountryDao(country: Country): ModelDao.CountryWithCurrencies =
         ModelDao.CountryWithCurrencies(
             ModelDao.Country(
+                countryId = country.countryId,
                 name = country.name,
                 capital = country.capital,
                 flag = country.flagUrl,
@@ -35,6 +38,7 @@ object CountryDaoAdapter {
     fun mapToCurrencyDao(currencyList: List<Country.Currency>): List<ModelDao.Currency> =
         currencyList.map { currency ->
             ModelDao.Currency(
+                currencyId = currency.currencyId,
                 name = currency.name,
                 code = currency.code,
                 symbol = currency.symbol

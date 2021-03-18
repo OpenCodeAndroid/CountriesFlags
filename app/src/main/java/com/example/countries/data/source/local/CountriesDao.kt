@@ -9,6 +9,7 @@ import androidx.room.Update
 import com.example.countries.data.source.local.ModelDao.Country
 import com.example.countries.data.source.local.ModelDao.CountryWithCurrencies
 import com.example.countries.data.source.local.ModelDao.Currency
+import kotlinx.coroutines.flow.Flow
 
 /**
  * Data Access Object for the countries table.
@@ -23,24 +24,47 @@ interface CountriesDao {
      */
     @Transaction
     @Query("SELECT * FROM Countries")
-    suspend fun getCountries(): List<Country>
+    fun getCountries(): Flow<List<Country>>
 
     /**
-     * Insert a CountryWithCurrencies in the database. If the country already exists, replace it.
+     * Insert a List of CountryWithCurrencies in the database. If the country already exists, replace it.
      *
-     * @param countryWithCurrenciesList the Country With Currencies to be inserted.
+     * @param countryWithCurrenciesList the Country With Currencies List to be inserted.
      */
     @Transaction
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun save(countryWithCurrenciesList: List<CountryWithCurrencies>) {
-        countryWithCurrenciesList.forEach {
-                countryWithCurrencies ->
-            insertCountry(countryWithCurrencies.countries)
-            countryWithCurrencies.currencies.forEach { currency ->
-                insertCurrency(currency)
-                insertCountryCurrencyCrossRef(ModelDao.CountryCurrencyCrossRef(countryWithCurrencies.countries.cioc, currency.code))
-            }
+        countryWithCurrenciesList.forEach { countryWithCurrencies ->
+            insertCountry(countryWithCurrencies)
         }
+    }
+
+    /**
+     * Insert a List of CountryWithCurrencies in the database. If the country already exists, replace it.
+     *
+     * @param countryWithCurrenciesList the Country With Currencies List to be inserted.
+     */
+    @Transaction
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertCountry(countryWithCurrencies: CountryWithCurrencies) {
+        val country = countryWithCurrencies.countries
+        insertCountry(country)
+        countryWithCurrencies.currencies.forEach { currency ->
+            insertCurrenciesAndLinkToCountry(currency, country.countryId)
+        }
+    }
+
+    private suspend fun insertCurrenciesAndLinkToCountry(
+        currency: Currency,
+        countryId: String
+    ) {
+        insertCurrency(currency)
+        insertCountryCurrencyCrossRef(
+            ModelDao.CountryCurrencyCrossRef(
+                countryId,
+                currency.currencyId
+            )
+        )
     }
 
     @Transaction
@@ -73,9 +97,13 @@ interface CountriesDao {
      * @param countryId the country id.
      * @return the country with countryId.
      */
+    @Transaction
+    @Query("SELECT * FROM Countries WHERE countryId = :countryId")
+    suspend fun getCountryWithCurrenciesById(countryId: String): CountryWithCurrencies?
 
-    @Query("SELECT * FROM Countries WHERE cioc = :countryId")
-    suspend fun getCountryById(countryId: String): Country?
+    @Transaction
+    suspend fun getCountryById(countryId: String) =
+        getCountryWithCurrenciesById(countryId)?.mapToModel()
 
     /**
      * Update a country.
@@ -93,7 +121,7 @@ interface CountriesDao {
      * @return the number of countries deleted. This should always be 1.
      */
     @Transaction
-    @Query("DELETE FROM Countries WHERE cioc = :countryId")
+    @Query("DELETE FROM Countries WHERE countryId = :countryId")
     suspend fun deleteCountryById(countryId: String): Int
 
     /**
@@ -123,4 +151,22 @@ interface CountriesDao {
         deleteCurrencies()
         deleteCountryCurrencyCrossRef()
     }
+
+    /**
+     * Query se a Countries by name.
+     * @param name the country name to be selected
+     * @return list of Country where the name is name.
+     */
+    @Transaction // TODO
+    @Query("SELECT * FROM Countries WHERE name = :name")
+    suspend fun getCountryByName(name: String): List<CountryWithCurrencies>
+
+    /**
+     * Query se a Countries by name.
+     * @param name the country name to be selected
+     * @return list of Country where the name is name.
+     */
+    @Transaction // TODO
+    @Query("SELECT * FROM Countries WHERE name LIKE :name")
+    suspend fun getCountriesByName(name: String): List<CountryWithCurrencies>
 }

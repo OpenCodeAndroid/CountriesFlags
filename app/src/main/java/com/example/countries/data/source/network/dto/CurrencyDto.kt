@@ -14,7 +14,7 @@ For support, please feel free to contact me at https://www.linkedin.com/in/syeda
 
 data class CurrencyDto(
 
-    @SerializedName("code") val code: String,
-    @SerializedName("name") val name: String,
+    @SerializedName("code") val code: String?,
+    @SerializedName("name") val name: String?,
     @SerializedName("symbol") val symbol: String?
 )

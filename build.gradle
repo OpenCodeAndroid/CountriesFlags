@@ -24,6 +24,7 @@ allprojects {
     repositories {
         google()
         jcenter()
+        maven { url 'https://jitpack.io' }
     }
 }
 
@@ -56,5 +57,7 @@ ext {
     robolectricVersion = '4.5.1'
     androidxTestExtVersion = '1.1.2'
     espressoVersion = '3.3.0'
+    glideVersion = '4.10.0'
+    youSvgGlideVersion = 'v2.0.0'
     timberVersion = '4.7.1'
 }

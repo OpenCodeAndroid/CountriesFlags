@@ -83,6 +83,11 @@ dependencies {
     implementation "org.koin:koin-core:$koinVersion"
     implementation "org.koin:koin-core-ext:$koinVersion"
 
+    // Glide
+    implementation "com.github.bumptech.glide:glide:$glideVersion"
+    annotationProcessor "com.github.bumptech.glide:compiler:$glideVersion"
+    implementation "com.github.corouteam:GlideToVectorYou:$youSvgGlideVersion"
+
     // Koin for Unit tests
     testImplementation "org.koin:koin-test:$koinVersion"
 

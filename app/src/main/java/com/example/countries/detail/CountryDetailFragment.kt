@@ -1,5 +1,6 @@
 package com.example.countries.detail
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -67,11 +68,26 @@ class CountryDetailFragment : Fragment() {
         imageView.contentDescription =
             imageView.context.getString(R.string.country_flag_description, country.name)
 
-        detailRecyclerViewAdapter.updateList(createDetailList(country))
+        detailRecyclerViewAdapter.updateList(createDetailList(imageView.context, country))
         detailRecyclerViewAdapter.notifyDataSetChanged()
     }
 
-    private fun createDetailList(country: Country): List<DetailItems> {
-        return listOf(DetailItems("aajslhdfa", "basdfasdf"))
+    private fun createDetailList(context: Context, country: Country): List<DetailItems> {
+        val mutableListDetailItems: MutableList<DetailItems> = mutableListOf()
+        if (country.currencies.size > 1) {
+            mutableListDetailItems.add(
+                DetailItems(context.getString(R.string.currencies_description_size,country.name, country.currencies.size.toString()), ""))
+        } else {
+            mutableListDetailItems.add(
+                DetailItems(context.getString(R.string.currency_description_size_one,country.name), ""))
+        }
+
+        country.currencies.forEach { currency ->
+            mutableListDetailItems.add(
+                DetailItems(context.getString(R.string.currencies_description_code, currency.name, currency.symbol), ""))
+        }
+
+        context.getString(R.string.country_flag_description, country.name)
+        return mutableListDetailItems
     }
 }

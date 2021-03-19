@@ -10,12 +10,12 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.sendBlocking
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.channelFlow
 
 class NetworkObserver(val context: Context) {
 
-    companion object{
-        const val  MILLISECONDS_DEBOUNCE_NETWORK_CHANGES = 100L
+    companion object {
+        const val MILLISECONDS_DEBOUNCE_NETWORK_CHANGES = 100L
     }
 
     private fun network(isConnected: ((Boolean) -> Unit)): (() -> Unit) {
@@ -29,7 +29,9 @@ class NetworkObserver(val context: Context) {
             cancelable = networkO(isConnected)
         }
         return fun() {
-            (context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager).removeDefaultNetworkActiveListener(listener)
+            (context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager).removeDefaultNetworkActiveListener(
+                listener
+            )
             cancelable()
         }
     }
@@ -45,21 +47,32 @@ class NetworkObserver(val context: Context) {
             override fun onUnavailable() {
                 isConnected(false)
             }
+
+            override fun onLosing(network: Network, maxMsToLive: Int) {
+                isConnected(false)
+            }
+
+            override fun onLost(network: Network?) {
+                isConnected(false)
+            }
         }
 
         (context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
             .registerDefaultNetworkCallback(listener)
 
         return fun() {
-            (context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager).unregisterNetworkCallback(listener)
+            (context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager).unregisterNetworkCallback(
+                listener
+            )
         }
     }
 
     @ExperimentalCoroutinesApi
-    suspend fun isConnectedFlow(): Flow<Boolean> = callbackFlow<Boolean> {
-
-        val close = network {
-            sendBlocking(it)
+    suspend fun isConnectedFlow(): Flow<Boolean> = channelFlow {
+        val close = network { isOn ->
+            if (!isClosedForSend) {
+                sendBlocking(isOn)
+            }
         }
         awaitClose { close() }
     }

@@ -10,6 +10,7 @@ import com.example.countries.data.source.CountriesRepository
 import com.example.countries.data.source.DefaultCountriesRepository
 import com.example.countries.data.source.local.CountriesDatabase
 import com.example.countries.data.source.local.CountriesLocalDataSource
+import com.example.countries.data.source.network.AndroidNetworkObserver
 import com.example.countries.data.source.network.ApiHelper
 import com.example.countries.data.source.network.NetworkObserver
 import com.example.countries.data.source.network.RemoteDataSource
@@ -31,7 +32,7 @@ object AppModule {
             RemoteDataSource(api = get())
         }
 
-        single { NetworkObserver(context = androidContext()) }
+        single <NetworkObserver> { AndroidNetworkObserver(context = androidContext()) }
 
         // Local
         single(named<CountriesDatabase>()) { countriesDatabase() }

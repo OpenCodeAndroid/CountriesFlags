@@ -12,7 +12,7 @@ import kotlinx.coroutines.channels.sendBlocking
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
 
-class NetworkObserver(val context: Context) {
+class AndroidNetworkObserver(val context: Context) : NetworkObserver {
 
     companion object {
         const val MILLISECONDS_DEBOUNCE_NETWORK_CHANGES = 100L
@@ -68,7 +68,7 @@ class NetworkObserver(val context: Context) {
     }
 
     @ExperimentalCoroutinesApi
-    suspend fun isConnectedFlow(): Flow<Boolean> = channelFlow {
+    override suspend fun isConnectedFlow(): Flow<Boolean> = channelFlow {
         val close = network { isOn ->
             if (!isClosedForSend) {
                 sendBlocking(isOn)
@@ -76,4 +76,9 @@ class NetworkObserver(val context: Context) {
         }
         awaitClose { close() }
     }
+}
+
+interface NetworkObserver {
+    @ExperimentalCoroutinesApi
+    suspend fun isConnectedFlow(): Flow<Boolean>
 }

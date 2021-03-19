@@ -1,8 +1,9 @@
 package com.example.countries.data.domain
 
 import com.example.countries.data.Result
+import com.example.countries.data.source.network.AndroidNetworkObserver.Companion.MILLISECONDS_DEBOUNCE_NETWORK_CHANGES
 import com.example.countries.data.source.network.NetworkObserver
-import com.example.countries.data.source.network.NetworkObserver.Companion.MILLISECONDS_DEBOUNCE_NETWORK_CHANGES
+
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow

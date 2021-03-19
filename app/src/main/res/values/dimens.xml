@@ -5,4 +5,5 @@
     <dimen name="margin_small">8dp</dimen>
     <dimen name="margin_medium">12dp</dimen>
     <dimen name="margin_large">18dp</dimen>
+    <dimen name="padding_huge">42dp</dimen>
 </resources>

@@ -7,13 +7,12 @@ import androidx.lifecycle.viewModelScope
 import com.example.countries.Event
 import com.example.countries.data.Result
 import com.example.countries.data.business.model.Country
-import com.example.countries.data.domain.GetCountriesUseCase
-import com.example.countries.data.domain.SearchCountriesUseCase
+import com.example.countries.data.domain.HybridCountryLoadUseCase
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class CountriesViewModel(
-    private val getCountriesUseCase: GetCountriesUseCase,
-    private val searchCountriesUseCase: SearchCountriesUseCase
+    private val hybridCountryLoadUseCase: HybridCountryLoadUseCase
 ) : ViewModel() {
 
     private val _openCountryEvent = MutableLiveData<Event<String>>()
@@ -31,13 +30,14 @@ class CountriesViewModel(
 
     private fun loadAll() {
         viewModelScope.launch {
-
-            when (val result = getCountriesUseCase.invoke(false)) {
-                is Result.Error -> _showLoading.value = false
-                is Result.Loading -> _showLoading.value = true
-                is Result.Success -> {
-                    _dataCountries.value = result.data.filter { country -> !country.isEmpty }
-                    _showLoading.value = false
+            hybridCountryLoadUseCase.invoke().collect { result ->
+                when (result) {
+                    is Result.Error -> _showLoading.value = false
+                    is Result.Loading -> _showLoading.value = true
+                    is Result.Success -> {
+                        _dataCountries.value = result.data.filter { country -> !country.isEmpty }
+                        _showLoading.value = false
+                    }
                 }
             }
         }
@@ -65,18 +65,19 @@ class CountriesViewModel(
 
     private fun search(query: String) {
         viewModelScope.launch {
-            when (val result = searchCountriesUseCase.invoke(query, false)) {
-                is Result.Error ->
-                    _showLoading.value = false
-                is Result.Loading ->
-                    _showLoading.value = true
-                is Result.Success -> {
-                    _dataCountries.value = result.data.filter { country ->
-                        !country.isEmpty
+            hybridCountryLoadUseCase.invoke(query).collect { result: Result<List<Country>> ->
+                when (result) {
+                    is Result.Error ->
+                        _showLoading.value = false
+                    is Result.Loading ->
+                        _showLoading.value = true
+                    is Result.Success -> {
+                        _dataCountries.value = result.data.filter { country ->
+                            !country.isEmpty
+                        }
                     }
                 }
             }
         }
     }
-    // TODO: Implement the ViewModel
 }

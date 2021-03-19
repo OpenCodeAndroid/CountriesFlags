@@ -4,12 +4,12 @@ import com.example.countries.data.Result
 import com.example.countries.data.Result.Error
 import com.example.countries.data.Result.Success
 import com.example.countries.data.business.model.Country
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.ConcurrentMap
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.ConcurrentMap
 
 class DefaultCountriesRepository(
     private val localDataSource: CountriesDataSource,
@@ -77,7 +77,7 @@ class DefaultCountriesRepository(
     ): Result<Country> {
         // Remote first
         getCountryWithId(countryId)?.let {
-            when (val remoteCountry = remoteDataSource.getCountryByIsoCode(it.isoCode)) {
+            when (val remoteCountry = remoteDataSource.getCountryByName(it.name)) {
                 is Error -> Timber.w("Remote data source fetch failed")
                 is Success -> {
                     refreshLocalDataSource(remoteCountry.data)
@@ -99,14 +99,6 @@ class DefaultCountriesRepository(
     }
 
     private fun getCountryWithId(id: String) = cachedCountries?.get(id)
-
-    override suspend fun save(countryList: List<Country>) {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun deleteAllCountries() {
-        TODO("Not yet implemented")
-    }
 
     private fun refreshCache(countries: List<Country>) {
         cachedCountries?.clear()

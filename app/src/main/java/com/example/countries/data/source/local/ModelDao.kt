@@ -17,13 +17,12 @@ class ModelDao {
         var flag: String = ""
     )
 
-    // https://developer.android.com/training/data-storage/room/relationships
     data class CountryWithCurrencies @JvmOverloads constructor(
         @Embedded val countries: Country = Country(),
         @Relation(
-                parentColumn = "countryId",
-                entityColumn = "currencyId",
-                associateBy = Junction(CountryCurrencyCrossRef::class)
+            parentColumn = "countryId",
+            entityColumn = "currencyId",
+            associateBy = Junction(CountryCurrencyCrossRef::class)
         )
         var currencies: List<Currency> = emptyList()
     )

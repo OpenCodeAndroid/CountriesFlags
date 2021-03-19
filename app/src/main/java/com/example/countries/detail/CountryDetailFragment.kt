@@ -55,7 +55,7 @@ class CountryDetailFragment : Fragment() {
         }
     }
 
-    fun populate(country: Country) {
+    private fun populate(country: Country) {
         GlideToVectorYou
             .init()
             .with(imageView.context.applicationContext).requestBuilder
@@ -69,25 +69,43 @@ class CountryDetailFragment : Fragment() {
             imageView.context.getString(R.string.country_flag_description, country.name)
 
         detailRecyclerViewAdapter.updateList(createDetailList(imageView.context, country))
-        detailRecyclerViewAdapter.notifyDataSetChanged()
     }
 
-    private fun createDetailList(context: Context, country: Country): List<DetailItems> {
-        val mutableListDetailItems: MutableList<DetailItems> = mutableListOf()
+    private fun createDetailList(context: Context, country: Country): List<String> {
+        val mutableListDetailItems: MutableList<String> = mutableListOf()
+
+        // Currency
         if (country.currencies.size > 1) {
             mutableListDetailItems.add(
-                DetailItems(context.getString(R.string.currencies_description_size, country.name, country.currencies.size.toString()), ""))
+                context.getString(
+                    R.string.currencies_description_size,
+                    country.name,
+                    country.currencies.size.toString()
+                )
+            )
         } else {
             mutableListDetailItems.add(
-                DetailItems(context.getString(R.string.currency_description_size_one, country.name), ""))
+                context.getString(R.string.currency_description_size_one, country.name)
+            )
         }
 
         country.currencies.forEach { currency ->
             mutableListDetailItems.add(
-                DetailItems(context.getString(R.string.currencies_description_code, currency.name, currency.symbol), ""))
+                context.getString(
+                    R.string.currencies_description_code,
+                    currency.name,
+                    currency.symbol
+                )
+            )
         }
 
-        context.getString(R.string.country_flag_description, country.name)
+        mutableListDetailItems.add(
+            context.getString(
+                R.string.capital_description,
+                country.capital
+            )
+        )
+
         return mutableListDetailItems
     }
 }

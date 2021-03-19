@@ -3,7 +3,6 @@ package com.example.countries.data.source.network
 import com.example.countries.data.Result
 import com.example.countries.data.business.model.Country
 import com.example.countries.data.source.CountriesDataSource
-import com.example.countries.data.source.network.dto.CountryDto
 
 class RemoteDataSource(val api: ApiHelper) : CountriesDataSource {
     override suspend fun getCountries(): Result<List<Country>> {
@@ -28,30 +27,5 @@ class RemoteDataSource(val api: ApiHelper) : CountriesDataSource {
         } catch (e: Exception) {
             Result.Error(e)
         }
-    }
-
-    override suspend fun getCountryByIsoCode(isoCode: String): Result<Country> {
-        return try {
-            val countryDto: CountryDto = api.getCountryByIso(isoCode)
-            Result.Success(countryDto.mapToModel())
-        } catch (e: Exception) {
-            Result.Error(e)
-        }
-    }
-
-    override suspend fun getCountry(countryId: String): Result<Country> {
-        TODO("Not necessary")
-    }
-
-    override suspend fun save(countryList: List<Country>) {
-        // "Not necessary"
-    }
-
-    override suspend fun saveCountry(country: Country) {
-        // "Not necessary"
-    }
-
-    override suspend fun deleteAllCountries() {
-        // "Not necessary"
     }
 }

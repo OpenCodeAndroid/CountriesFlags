@@ -8,19 +8,18 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 
-class GetCountryUseCase(
+class GetCountriesByNameUseCase(
     private val countriesRepository: CountriesRepository,
     networkObserver: NetworkObserver
 ) :
-    NetworkComponentCase<Country, Result<Country>>(networkObserver) {
+    NetworkComponentCase<List<Country>, Result<List<Country>>>(networkObserver) {
 
     @ExperimentalCoroutinesApi
     @FlowPreview
-    suspend fun invoke(countryId: String, forceUpdate: Boolean = false): Flow<Result<Country>> {
+    suspend fun invoke(countryId: String, forceUpdate: Boolean = false): Flow<Result<List<Country>>> {
         return super.invoke(forceUpdate, countryId)
     }
-
-    override suspend fun getData(parameter: String, forceUpdate: Boolean): Result<Country> {
-        return countriesRepository.getCountry(parameter, forceUpdate = forceUpdate)
+    override suspend fun getData(parameter: String, forceUpdate: Boolean): Result<List<Country>> {
+        return countriesRepository.getCountriesByName(parameter, forceUpdate)
     }
 }

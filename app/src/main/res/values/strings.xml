@@ -7,4 +7,5 @@
     <string name="currency_description_size_one">%1$s uses one currency</string>
     <string name="currencies_description_size">%1$s uses %2$s currencies</string>
     <string name="currencies_description_code">the currency is %1$s and currency symbol is %2$s</string>
+    <string name="capital_description">the capital is %1$s</string>
 </resources>

@@ -1,15 +1,18 @@
 package com.example.countries.di
 
 import androidx.room.Room
-import com.example.countries.data.domain.GetCountriesUseCase
+import com.example.countries.data.domain.GetAllCountriesUseCase
+import com.example.countries.data.domain.GetCountriesByNameUseCase
 import com.example.countries.data.domain.GetCountryUseCase
-import com.example.countries.data.domain.SearchCountriesUseCase
+import com.example.countries.data.domain.HybridCountryLoadUseCase
 import com.example.countries.data.source.CountriesDataSource
 import com.example.countries.data.source.CountriesRepository
 import com.example.countries.data.source.DefaultCountriesRepository
 import com.example.countries.data.source.local.CountriesDatabase
 import com.example.countries.data.source.local.CountriesLocalDataSource
+import com.example.countries.data.source.network.AndroidNetworkObserver
 import com.example.countries.data.source.network.ApiHelper
+import com.example.countries.data.source.network.NetworkObserver
 import com.example.countries.data.source.network.RemoteDataSource
 import com.example.countries.data.source.network.RetrofitBuilder
 import com.example.countries.detail.CountryDetailViewModel
@@ -29,6 +32,8 @@ object AppModule {
             RemoteDataSource(api = get())
         }
 
+        single <NetworkObserver> { AndroidNetworkObserver(context = androidContext()) }
+
         // Local
         single(named<CountriesDatabase>()) { countriesDatabase() }
         single { get<CountriesDatabase>(named<CountriesDatabase>()).countryDao() }
@@ -46,17 +51,13 @@ object AppModule {
         }
 
         // UseCases
-        factory { GetCountriesUseCase(get()) }
-        factory { GetCountryUseCase(get()) }
-        factory { SearchCountriesUseCase(get()) }
+        factory { GetAllCountriesUseCase(get(), get()) }
+        factory { GetCountryUseCase(get(), get()) }
+        factory { GetCountriesByNameUseCase(get(), get()) }
+        factory { HybridCountryLoadUseCase(get(), get()) }
 
         viewModel { CountryDetailViewModel(getCountryUseCase = get()) }
-        viewModel {
-            CountriesViewModel(
-                getCountriesUseCase = get(),
-                searchCountriesUseCase = get()
-            )
-        }
+        viewModel { CountriesViewModel(hybridCountryLoadUseCase = get()) }
     }
 }
 

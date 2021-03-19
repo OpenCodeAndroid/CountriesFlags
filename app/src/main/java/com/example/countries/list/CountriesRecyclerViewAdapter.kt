@@ -10,11 +10,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.example.countries.R
 import com.example.countries.data.business.model.Country
-import com.example.countries.dummy.DummyContent.DummyItem
 import com.github.twocoffeesoneteam.glidetovectoryou.GlideToVectorYou
 
 /**
- * [RecyclerView.Adapter] that can display a [DummyItem].
+ * [RecyclerView.Adapter] that can display a [Country].
  * TODO: Replace the implementation with code for your data type.
  */
 class CountriesRecyclerViewAdapter(

@@ -56,14 +56,16 @@ class GetAllCountriesUseCaseTest {
                 capital = "mind town",
                 isoCode = "har",
                 currencies = currencies
-            ), Country(
+            ),
+            Country(
                 countryId = "2",
                 name = "name",
                 flagUrl = "url",
                 capital = "mind town",
                 isoCode = "har",
                 currencies = currencies
-            ), Country(
+            ),
+            Country(
                 countryId = "3",
                 name = "name",
                 flagUrl = "url",

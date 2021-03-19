@@ -31,7 +31,9 @@ class DefaultCountriesRepositoryTest {
         localDataSource = FakeDataSource(localCountries.toMutableList())
         // Get a reference to the class under test
         countryRepository = DefaultCountriesRepository(
-            localDataSource, remoteDataSource, Dispatchers.Unconfined
+            localDataSource,
+            remoteDataSource,
+            Dispatchers.Unconfined
         )
     }
 

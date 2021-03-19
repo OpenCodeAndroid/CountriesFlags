@@ -20,9 +20,9 @@ class ModelDao {
     data class CountryWithCurrencies @JvmOverloads constructor(
         @Embedded val countries: Country = Country(),
         @Relation(
-                parentColumn = "countryId",
-                entityColumn = "currencyId",
-                associateBy = Junction(CountryCurrencyCrossRef::class)
+            parentColumn = "countryId",
+            entityColumn = "currencyId",
+            associateBy = Junction(CountryCurrencyCrossRef::class)
         )
         var currencies: List<Currency> = emptyList()
     )

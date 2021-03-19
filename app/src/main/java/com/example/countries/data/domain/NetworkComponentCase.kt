@@ -3,7 +3,6 @@ package com.example.countries.data.domain
 import com.example.countries.data.Result
 import com.example.countries.data.source.network.AndroidNetworkObserver.Companion.MILLISECONDS_DEBOUNCE_NETWORK_CHANGES
 import com.example.countries.data.source.network.NetworkObserver
-
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
@@ -44,8 +43,10 @@ abstract class NetworkComponentCase<T, R : Result<T>>(
                             .debounce(MILLISECONDS_DEBOUNCE_NETWORK_CHANGES)
                             .collect {
                                 // When online try it
-                                when (val newResult =
-                                    getData(parameter, forceUpdate)) {
+                                when (
+                                    val newResult =
+                                        getData(parameter, forceUpdate)
+                                ) {
                                     is Result.Error -> {
                                         // Try again from network
                                         Timber.e(
@@ -77,7 +78,3 @@ abstract class NetworkComponentCase<T, R : Result<T>>(
         }.distinctUntilChanged()
     }
 }
-
-
-
-

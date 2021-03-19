@@ -4,12 +4,12 @@ import com.example.countries.data.Result
 import com.example.countries.data.Result.Error
 import com.example.countries.data.Result.Success
 import com.example.countries.data.business.model.Country
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.ConcurrentMap
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.ConcurrentMap
 
 class DefaultCountriesRepository(
     private val localDataSource: CountriesDataSource,

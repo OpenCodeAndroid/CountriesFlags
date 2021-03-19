@@ -20,8 +20,8 @@ class FakeRepository : CountriesRepository {
         shouldReturnError = value
     }
 
-    fun add(list :List<Country>){
-        list.forEach{
+    fun add(list: List<Country>) {
+        list.forEach {
             countriesServiceData[it.countryId] = it
         }
     }

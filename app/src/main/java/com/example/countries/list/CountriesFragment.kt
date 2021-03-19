@@ -52,26 +52,31 @@ class CountriesFragment : Fragment() {
     }
 
     private fun searchViewSetup() {
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        searchView.setOnQueryTextListener(
+            object : SearchView.OnQueryTextListener {
 
-            // Called when the user submits the query.
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                viewModel.onQueryTextSubmit(query)
-                return false
-            }
+// Called when the user submits the query.
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    viewModel.onQueryTextSubmit(query)
+                    return false
+                }
 
-            // Called when the query text is changed by the user.
-            override fun onQueryTextChange(newText: String?): Boolean {
-                viewModel.onQueryTextChange(newText)
-                return false
+// Called when the query text is changed by the user.
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    viewModel.onQueryTextChange(newText)
+                    return false
+                }
             }
-        })
+        )
     }
 
     private fun setupNavigation() {
-        viewModel.openCountryEvent.observe(this.viewLifecycleOwner, EventObserver { id ->
-            openCountryDetails(id)
-        })
+        viewModel.openCountryEvent.observe(
+            this.viewLifecycleOwner,
+            EventObserver { id ->
+                openCountryDetails(id)
+            }
+        )
     }
 
     private fun setupObservers() {

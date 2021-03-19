@@ -154,12 +154,18 @@ interface CountriesDao {
 
     /**
      * Query se a Countries by name.
-     * @param name the country name to be selected
+     * @param name the country name to be selecte
      * @return list of Country where the name is name.
      */
     @Transaction // TODO
     @Query("SELECT * FROM Countries WHERE name = :name")
     suspend fun getCountryByName(name: String): List<CountryWithCurrencies>
+
+    @Transaction
+    suspend fun getCountriesByName(name: String) =
+        getCountriesWithCurrenciesByName(name).map {
+            it.mapToModel()
+        }
 
     /**
      * Query se a Countries by name.
@@ -167,6 +173,6 @@ interface CountriesDao {
      * @return list of Country where the name is name.
      */
     @Transaction // TODO
-    @Query("SELECT * FROM Countries WHERE name LIKE :name")
-    suspend fun getCountriesByName(name: String): List<CountryWithCurrencies>
+    @Query("SELECT * FROM Countries WHERE name LIKE '%' || :name || '%'")
+    suspend fun getCountriesWithCurrenciesByName(name: String): List<CountryWithCurrencies>
 }

@@ -26,10 +26,25 @@ class CountriesLocalDataSource internal constructor(
         return withContext(ioDispatcher) {
             try {
                 val country = countriesDao.getCountryByName(name)
-                if (country == null) {
+                if (country.isEmpty()) {
                     Result.Error(NullPointerException("Local data source get failed"))
                 } else {
                     Result.Success(country.first().mapToModel())
+                }
+            } catch (e: Exception) {
+                Result.Error(e)
+            }
+        }
+    }
+
+    override suspend fun getCountriesByName(name: String): Result<List<Country>> {
+        return withContext(ioDispatcher) {
+            try {
+                val country = countriesDao.getCountriesByName(name)
+                if (country.isEmpty()) {
+                    Result.Error(NullPointerException("Local data source get failed"))
+                } else {
+                    Result.Success(country)
                 }
             } catch (e: Exception) {
                 Result.Error(e)

@@ -64,6 +64,13 @@ class DefaultCountriesRepository(
         }
     }
 
+    override suspend fun getCountriesByName(
+        name: String,
+        forceUpdate: Boolean
+    ): Result<List<Country>> {
+        return localDataSource.getCountriesByName(name)
+    }
+
     private suspend fun fetchCountryFromRemoteOrLocal(
         countryId: String,
         forceUpdate: Boolean

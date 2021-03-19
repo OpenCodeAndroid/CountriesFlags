@@ -76,10 +76,10 @@ class CountryDetailFragment : Fragment() {
         val mutableListDetailItems: MutableList<DetailItems> = mutableListOf()
         if (country.currencies.size > 1) {
             mutableListDetailItems.add(
-                DetailItems(context.getString(R.string.currencies_description_size,country.name, country.currencies.size.toString()), ""))
+                DetailItems(context.getString(R.string.currencies_description_size, country.name, country.currencies.size.toString()), ""))
         } else {
             mutableListDetailItems.add(
-                DetailItems(context.getString(R.string.currency_description_size_one,country.name), ""))
+                DetailItems(context.getString(R.string.currency_description_size_one, country.name), ""))
         }
 
         country.currencies.forEach { currency ->

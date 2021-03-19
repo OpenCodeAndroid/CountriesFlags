@@ -22,6 +22,14 @@ class RemoteDataSource(val api: ApiHelper) : CountriesDataSource {
         }
     }
 
+    override suspend fun getCountriesByName(name: String): Result<List<Country>> {
+        return try {
+            Result.Success(api.getCountry(name).map { it.mapToModel() })
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
+    }
+
     override suspend fun getCountryByIsoCode(isoCode: String): Result<Country> {
         return try {
             val countryDto: CountryDto = api.getCountryByIso(isoCode)

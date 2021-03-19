@@ -3,6 +3,7 @@ package com.example.countries.di
 import androidx.room.Room
 import com.example.countries.data.domain.GetCountriesUseCase
 import com.example.countries.data.domain.GetCountryUseCase
+import com.example.countries.data.domain.SearchCountriesUseCase
 import com.example.countries.data.source.CountriesDataSource
 import com.example.countries.data.source.CountriesRepository
 import com.example.countries.data.source.DefaultCountriesRepository
@@ -47,9 +48,15 @@ object AppModule {
         // UseCases
         factory { GetCountriesUseCase(get()) }
         factory { GetCountryUseCase(get()) }
+        factory { SearchCountriesUseCase(get()) }
 
         viewModel { CountryDetailViewModel(getCountryUseCase = get()) }
-        viewModel { CountriesViewModel(getCountriesUseCase = get()) }
+        viewModel {
+            CountriesViewModel(
+                getCountriesUseCase = get(),
+                searchCountriesUseCase = get()
+            )
+        }
     }
 }
 

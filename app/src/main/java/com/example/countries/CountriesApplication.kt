@@ -15,4 +15,13 @@ class CountriesApplication : Application() {
             modules(AppModule.content)
         }
     }
+
+    // fun isOnline(): Boolean {
+    //     val connMgr = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    //     var isActive = connMgr.isDefaultNetworkActive
+    //     connMgr.addDefaultNetworkActiveListener {
+    //         isActive =true
+    //     }
+    //     return networkInfo?.isConnected == true
+    // }
 }

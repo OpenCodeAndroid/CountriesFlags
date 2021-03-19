@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Countries</string>
+    <string name="search_hint">Types a country name here</string>
+
     <string name="country_flag">Country Flag</string>
     <string name="country_flag_description"> %1$s Flag</string>
     <string name="currency_description_size_one">%1$s uses one currency</string>

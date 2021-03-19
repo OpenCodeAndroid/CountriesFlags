@@ -14,6 +14,10 @@ import kotlinx.coroutines.flow.callbackFlow
 
 class NetworkObserver(val context: Context) {
 
+    companion object{
+        const val  MILLISECONDS_DEBOUNCE_NETWORK_CHANGES = 100L
+    }
+
     private fun network(isConnected: ((Boolean) -> Unit)): (() -> Unit) {
         lateinit var cancelable: (() -> Unit)
         val listener = ConnectivityManager.OnNetworkActiveListener {

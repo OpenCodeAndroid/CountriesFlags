@@ -51,7 +51,7 @@ object AppModule {
         // UseCases
         factory { GetCountriesUseCase(get(), get()) }
         factory { GetCountryUseCase(get(), get()) }
-        factory { SearchCountriesUseCase(get()) }
+        factory { SearchCountriesUseCase(get(),get()) }
 
         viewModel { CountryDetailViewModel(getCountryUseCase = get()) }
         viewModel {

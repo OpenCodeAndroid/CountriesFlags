@@ -7,8 +7,11 @@ import androidx.lifecycle.viewModelScope
 import com.example.countries.data.Result
 import com.example.countries.data.business.model.Country
 import com.example.countries.data.domain.GetCountryUseCase
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class CountryDetailViewModel(val getCountryUseCase: GetCountryUseCase) : ViewModel() {
 
@@ -17,15 +20,17 @@ class CountryDetailViewModel(val getCountryUseCase: GetCountryUseCase) : ViewMod
 
     fun start(countryId: String) {
         viewModelScope.launch {
-            handleResult(countryId)
+            getData(countryId)
         }
     }
 
-    private suspend fun handleResult(countryId: String) {
+    @ExperimentalCoroutinesApi
+    @FlowPreview
+    private suspend fun getData(countryId: String) {
         getCountryUseCase.invoke(countryId).collect { result ->
             when (result) {
-                is Result.Error -> TODO()
-                is Result.Loading -> TODO()
+                is Result.Error -> Timber.e(result.exception)
+                is Result.Loading -> Timber.w("${CountryDetailViewModel::class.java.simpleName} loading")
                 is Result.Success -> {
                     postIfValid(result)
                 }

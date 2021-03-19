@@ -74,6 +74,7 @@ class CountryDetailFragment : Fragment() {
     private fun createDetailList(context: Context, country: Country): List<String> {
         val mutableListDetailItems: MutableList<String> = mutableListOf()
 
+        // Currency
         if (country.currencies.size > 1) {
             mutableListDetailItems.add(
                 context.getString(
@@ -97,6 +98,13 @@ class CountryDetailFragment : Fragment() {
                 )
             )
         }
+
+        mutableListDetailItems.add(
+            context.getString(
+                R.string.capital_description,
+                country.capital
+            )
+        )
 
         return mutableListDetailItems
     }

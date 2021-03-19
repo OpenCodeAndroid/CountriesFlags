@@ -3,39 +3,31 @@ package com.example.countries.data.domain
 import com.example.countries.data.Result
 import com.example.countries.data.business.model.Country
 import com.example.countries.data.source.CountriesRepository
+import com.example.countries.data.source.network.NetworkObserver
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 
 class SearchCountriesUseCase(
     private val countriesRepository: CountriesRepository,
-    private var needToRefresh: Boolean = false,
-    private var delayToRetryMilliSeconds: Long = 1000L
+    private val networkObserver: NetworkObserver
 ) {
-    var flow: Flow<Result<List<Country>>>? = null
+
+    @FlowPreview
+    @ExperimentalCoroutinesApi
     suspend operator fun invoke(
         name: String,
-        forceUpdate: Boolean = false
-    ): Flow<Result<List<Country>>> {
-        needToRefresh = forceUpdate
-        flow = flow {
-            while (needToRefresh) {
-                when (val result = countriesRepository.getCountriesByName(name, forceUpdate)) {
-                    is Result.Error -> {
-                        emit(result)
-                        delay(delayToRetryMilliSeconds)
-                    }
-                    Result.Loading -> {
-                        emit(result)
-                        delay(delayToRetryMilliSeconds)
-                    }
-                    is Result.Success -> {
-                        emit(result)
-                        needToRefresh = false
-                    }
-                }
-            }
+        forceUpdate: Boolean = false // TODO check if remove it from here and keep the networkObserver command that
+    ): Flow<Result<List<Country>>> = networkObserver
+        .isConnectedFlow()
+        .debounce(NetworkObserver.MILLISECONDS_DEBOUNCE_NETWORK_CHANGES)
+        .map { isOnline ->
+            countriesRepository.getCountriesByName(name, forceUpdate = isOnline)
         }
-        return flow!!
-    }
+        .distinctUntilChanged()
 }

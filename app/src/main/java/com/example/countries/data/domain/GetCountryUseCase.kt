@@ -4,6 +4,7 @@ import com.example.countries.data.Result
 import com.example.countries.data.business.model.Country
 import com.example.countries.data.source.CountriesRepository
 import com.example.countries.data.source.network.NetworkObserver
+import com.example.countries.data.source.network.NetworkObserver.Companion.MILLISECONDS_DEBOUNCE_NETWORK_CHANGES
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
@@ -19,11 +20,10 @@ class GetCountryUseCase(
     @ExperimentalCoroutinesApi
     suspend operator fun invoke(
         countryId: String,
-        forceUpdate: Boolean = false
+        forceUpdate: Boolean = false // TODO check if remove it from here and keep the networkObserver command that
     ): Flow<Result<Country>> {
-
-        return networkObserver.isConnectedFlow().debounce(100).map {
-            countriesRepository.getCountry(countryId, it)
+        return networkObserver.isConnectedFlow().debounce(MILLISECONDS_DEBOUNCE_NETWORK_CHANGES).map {isOnline->
+            countriesRepository.getCountry(countryId, forceUpdate = isOnline)
         }.distinctUntilChanged()
     }
 }

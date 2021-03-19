@@ -82,5 +82,4 @@ class CountriesViewModel(
             }
         }
     }
-    // TODO: Implement the ViewModel
 }

@@ -1,7 +1,5 @@
 package com.example.countries.list
 
-import android.database.Cursor
-import android.database.MatrixCursor
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.countries.EventObserver
 import com.example.countries.R
-import com.example.countries.data.business.model.Country
 import org.koin.android.ext.android.inject
 
 /**
@@ -26,7 +23,6 @@ class CountriesFragment : Fragment() {
     private lateinit var countriesAdapter: CountriesRecyclerViewAdapter
     private lateinit var progress: ProgressBar
     private lateinit var searchView: SearchView
-    private lateinit var suggestionsAdapter: CountrySearchSuggestionsAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,15 +52,12 @@ class CountriesFragment : Fragment() {
     }
 
     private fun searchViewSetup() {
-        searchView.suggestionsAdapter = CountrySearchSuggestionsAdapter(this.requireContext(), getCursor(listOf()), true).also {
-            suggestionsAdapter = it
-        }
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
 
             // Called when the user submits the query.
             override fun onQueryTextSubmit(query: String?): Boolean {
-                    viewModel.onQueryTextSubmit(query)
-                    return false
+                viewModel.onQueryTextSubmit(query)
+                return false
             }
 
             // Called when the query text is changed by the user.
@@ -73,25 +66,6 @@ class CountriesFragment : Fragment() {
                 return false
             }
         })
-    }
-
-    private fun getCursor(listOf: List<Country>): Cursor {
-        val columns = arrayOf<String>("_id", "name")
-        val to = intArrayOf(R.id.contentLabel)
-        val matrixCursor: MatrixCursor = MatrixCursor(columns)
-
-        // startManagingCursor(matrixCursor);
-        // fun startManagingCursor(matrixCursor: MatrixCursor) {
-        //     matrixCursor.addRow(arrayOf<Any>(1,"Danie Nogueira"))
-        //     matrixCursor.addRow(arrayOf<Any>(2,"Daniela Nogueira Bomzinho da Silva"))
-        //     matrixCursor.addRow(arrayOf<Any>(3,"Gabirela MArcela"))
-        //     matrixCursor.addRow(arrayOf<Any>(4,"Android Natural Nogueira"))
-        // }
-
-        listOf.forEach {
-            matrixCursor.addRow(arrayOf<Any>(it.countryId, it.name))
-        }
-        return matrixCursor
     }
 
     private fun setupNavigation() {
@@ -111,9 +85,6 @@ class CountriesFragment : Fragment() {
             } else {
                 View.GONE
             }
-        }
-        viewModel.dataSearchCountries.observe(this.viewLifecycleOwner) {
-            suggestionsAdapter.update(getCursor(it))
         }
     }
 

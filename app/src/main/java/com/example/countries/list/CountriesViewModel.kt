@@ -22,9 +22,6 @@ class CountriesViewModel(
     private val _dataCountries = MutableLiveData<List<Country>>()
     val dataCountries: LiveData<List<Country>> = _dataCountries
 
-    private val _dataSearchCountries = MutableLiveData<List<Country>>()
-    val dataSearchCountries: LiveData<List<Country>> = _dataSearchCountries
-
     private val _showLoading = MutableLiveData<Boolean>()
     val showLoading: LiveData<Boolean> = _showLoading
 

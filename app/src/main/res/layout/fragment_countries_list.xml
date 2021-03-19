@@ -17,24 +17,22 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-    <SearchView
-        android:id="@+id/searchView"
-        android:label="@string/app_name"
-        android:hint="@string/search_hint"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        >
-    </SearchView>
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/list"
-        android:name="com.example.countries.CountriesFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
+        <SearchView
+            android:id="@+id/searchView"
+            android:label="@string/app_name"
+            android:hint="@string/search_hint"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent" />
 
-        app:layoutManager="LinearLayoutManager"
-        tools:context=".list.CountriesFragment"
-        tools:listitem="@layout/country_item" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/list"
+            android:name="com.example.countries.CountriesFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            app:layoutManager="LinearLayoutManager"
+            tools:context=".list.CountriesFragment"
+            tools:listitem="@layout/country_item" />
     </LinearLayout>
 </FrameLayout>

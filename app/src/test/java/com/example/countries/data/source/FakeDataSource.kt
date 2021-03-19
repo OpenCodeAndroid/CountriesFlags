@@ -48,6 +48,24 @@ class FakeDataSource(var countries: MutableList<Country>? = mutableListOf()) : C
         }
     }
 
+    override suspend fun getCountriesByName(name: String): Result<List<Country>> {
+        val item = countries?.filter { it.name.contains(name) }
+        return if (item == null) {
+            Error(NullPointerException("Country not found"))
+        } else {
+            Success(item)
+        }
+    }
+
+    override suspend fun getCountryByIsoCode(isoCode: String): Result<Country> {
+        val item = countries?.first { it.isoCode.contains(isoCode) }
+        return if (item == null) {
+            Error(NullPointerException("Country not found"))
+        } else {
+            Success(item)
+        }
+    }
+
     override suspend fun save(countryList: List<Country>) {
         countries?.addAll(countryList)
     }

@@ -67,12 +67,13 @@ class CountriesLocalDataSourceTest : KoinTest {
         // GIVEN - a new country saved in the database
 
         val currencies = listOf(
-            Country.Currency("0", "wise", "w"),
-            Country.Currency("1", "experience", "e")
+            Country.Currency("id1", "0", "wise", "w"),
+            Country.Currency("id2", "1", "experience", "e")
         )
 
         val newCountry = listOf(
             Country(
+                countryId = "1",
                 name = "name",
                 flagUrl = "url",
                 capital = "mind town",
@@ -89,6 +90,7 @@ class CountriesLocalDataSourceTest : KoinTest {
         // THEN - Same country is returned
         assertThat(result.succeeded, CoreMatchers.`is`(true))
         result as Result.Success
+        assertThat(result.data[0].countryId, CoreMatchers.`is`("1"))
         assertThat(result.data[0].isoCode, CoreMatchers.`is`("har"))
         assertThat(result.data[0].name, CoreMatchers.`is`("name"))
         assertThat(result.data[0].flagUrl, CoreMatchers.`is`("url"))
@@ -103,12 +105,13 @@ class CountriesLocalDataSourceTest : KoinTest {
         // GIVEN - 2 new country saved in the database
 
         val currencies = listOf(
-            Country.Currency("0", "wise", "w"),
-            Country.Currency("1", "experience", "e")
+            Country.Currency("id1", "0", "wise", "w"),
+            Country.Currency("id2", "1", "experience", "e")
         )
 
         val newCountry = listOf(
             Country(
+                countryId = "1",
                 name = "name",
                 flagUrl = "url",
                 capital = "mind town",
@@ -118,12 +121,13 @@ class CountriesLocalDataSourceTest : KoinTest {
         )
 
         val currencies2 = listOf(
-            Country.Currency("0", "wise", "w"),
-            Country.Currency("1", "experience", "e2")
+            Country.Currency("id1", "0", "wise", "w"),
+            Country.Currency("id2", "1", "experience", "e2")
         )
 
         val newCountry2 = listOf(
             Country(
+                countryId = "2",
                 name = "name",
                 flagUrl = "url",
                 capital = "mind town",
@@ -141,12 +145,14 @@ class CountriesLocalDataSourceTest : KoinTest {
         // THEN - Same Countries is returned
         assertThat(result.succeeded, CoreMatchers.`is`(true))
         result as Result.Success
+        assertThat(result.data[0].countryId, CoreMatchers.`is`("1"))
         assertThat(result.data[0].isoCode, CoreMatchers.`is`("har"))
         assertThat(result.data[0].name, CoreMatchers.`is`("name"))
         assertThat(result.data[0].flagUrl, CoreMatchers.`is`("url"))
         assertThat(result.data[0].capital, CoreMatchers.`is`("mind town"))
         assertThat(result.data[0].currencies, CoreMatchers.`is`(currencies2))
 
+        assertThat(result.data[1].countryId, CoreMatchers.`is`("2"))
         assertThat(result.data[1].isoCode, CoreMatchers.`is`("har2"))
         assertThat(result.data[1].name, CoreMatchers.`is`("name"))
         assertThat(result.data[1].flagUrl, CoreMatchers.`is`("url"))

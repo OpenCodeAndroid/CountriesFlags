@@ -53,14 +53,14 @@ class DefaultCountriesRepository(
                 }
             }
 
-            val newTask = fetchCountryFromRemoteOrLocal(countryId, forceUpdate)
+            val newCountry = fetchCountryFromRemoteOrLocal(countryId, forceUpdate)
 
             // Refresh the cache with the new tasks
-            (newTask as? Success)?.let {
+            (newCountry as? Success)?.let {
                 cacheCountry(it.data)
             }
 
-            return@withContext newTask
+            return@withContext newCountry
         }
     }
 
@@ -93,8 +93,8 @@ class DefaultCountriesRepository(
         }
 
         // Local if remote fails
-        val localTasks = localDataSource.getCountry(countryId)
-        if (localTasks is Success) return localTasks
+        val localCountries = localDataSource.getCountry(countryId)
+        if (localCountries is Success) return localCountries
         return Error(Exception("Error fetching from remote and local"))
     }
 

@@ -12,10 +12,10 @@ import org.junit.Test
 
 class DefaultCountriesRepositoryTest {
 
-    private val country1 = Country("Title1", "Description1", emptyList(), "url1", "1")
-    private val country2 = Country("Title2", "Description2", emptyList(), "url2", "2")
-    private val country3 = Country("Title3", "Description3", emptyList(), "url3", "3")
-    private val newCountry = Country("Title new", "DescriptionNew", emptyList(), "urlNew", "New")
+    private val country1 = Country("1", "Title1", "Description1", emptyList(), "url1", "1")
+    private val country2 = Country("2", "Title2", "Description2", emptyList(), "url2", "2")
+    private val country3 = Country("3", "Title3", "Description3", emptyList(), "url3", "3")
+    private val newCountry = Country("4", "Title new", "DescriptionNew", emptyList(), "urlNew", "New")
     private val remoteCountries = listOf(country1, country2)
     private val localCountries = listOf(country3)
     private val newCountries = listOf(country3)

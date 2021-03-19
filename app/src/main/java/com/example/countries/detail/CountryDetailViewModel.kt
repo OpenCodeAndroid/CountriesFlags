@@ -21,7 +21,7 @@ class CountryDetailViewModel(val getCountryUseCase: GetCountryUseCase) : ViewMod
     }
 
     private suspend fun handleResult(countryId: String) {
-        when (val result = getCountryUseCase.invoke(countryId, true)) {
+        when (val result = getCountryUseCase.invoke(countryId)) {
             is Result.Error -> TODO()
             is Result.Loading -> TODO()
             is Result.Success -> {

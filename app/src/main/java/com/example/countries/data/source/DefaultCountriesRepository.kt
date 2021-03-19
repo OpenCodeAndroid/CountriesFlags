@@ -70,7 +70,7 @@ class DefaultCountriesRepository(
     ): Result<Country> {
         // Remote first
         getCountryWithId(countryId)?.let {
-            when (val remoteCountry = remoteDataSource.getCountryByName(it.name)) {
+            when (val remoteCountry = remoteDataSource.getCountryByIsoCode(it.isoCode)) {
                 is Error -> Timber.w("Remote data source fetch failed")
                 is Success -> {
                     refreshLocalDataSource(remoteCountry.data)

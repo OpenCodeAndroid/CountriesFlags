@@ -5,8 +5,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.example.countries.R
 import com.example.countries.data.business.model.Country
@@ -38,12 +38,11 @@ class CountriesRecyclerViewAdapter(
             .transition(DrawableTransitionOptions.withCrossFade())
             .placeholder(R.drawable.ic_launcher_background)
             .error(R.drawable.ic_launcher_background)
-            .transform(RoundedCorners(R.dimen.corner_radius))
             .into(holder.imageView)
 
         holder.imageView.contentDescription = holder.imageView.context.getString(R.string.country_flag_description, item.name)
-        holder.contentView.text = item.capital
-        holder.contentView.setOnClickListener {
+        holder.contentView.text = item.name
+        holder.cardView.setOnClickListener {
             onClick(item.countryId)
         }
     }
@@ -53,6 +52,7 @@ class CountriesRecyclerViewAdapter(
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val imageView: ImageView = view.findViewById(R.id.imageView)
         val contentView: TextView = view.findViewById(R.id.content)
+        val cardView: CardView = view.findViewById(R.id.cardView)
 
         override fun toString(): String {
             return super.toString() + " '" + contentView.text + "'"

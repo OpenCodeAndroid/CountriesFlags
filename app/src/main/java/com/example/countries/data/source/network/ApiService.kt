@@ -11,4 +11,7 @@ interface ApiService {
 
     @GET("name/{nameValue}")
     suspend fun getCountry(@Path("nameValue")name: String): List<CountryDto>
+
+    @GET("alpha/{isoCode}")
+    suspend fun getCountryByIso(@Path("isoCode")isoCode: String): CountryDto
 }

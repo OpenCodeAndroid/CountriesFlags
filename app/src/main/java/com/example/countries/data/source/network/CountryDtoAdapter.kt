@@ -26,9 +26,4 @@ object CountryDtoAdapter {
         }
 }
 
-// val countryId = UUID.randomUUID().toString()
-// val currencyId =  if (currency.code.isNotEmpty()) currency.code else  UUID.randomUUID().toString()
-//
-// insertCurrency(currency.copy(currencyId = currencyId))
-
 fun CountryDto.mapToModel() = CountryDtoAdapter.mapToCountry(this)

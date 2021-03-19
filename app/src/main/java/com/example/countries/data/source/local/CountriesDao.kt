@@ -13,18 +13,12 @@ import kotlinx.coroutines.flow.Flow
 
 /**
  * Data Access Object for the countries table.
+ * [CountryWithCurrencies] is the full object representation at the moment
+ * [ModelDao.Country] model does not include out of the box data from currencies
+ * the most used methods as API have a relation with [CountryWithCurrencies]
  */
 @Dao
 interface CountriesDao {
-
-    /**
-     * Select all countries from the countries table.
-     *
-     * @return all countries.
-     */
-    @Transaction
-    @Query("SELECT * FROM Countries")
-    fun getCountries(): Flow<List<Country>>
 
     /**
      * Insert a List of CountryWithCurrencies in the database. If the country already exists, replace it.
@@ -53,7 +47,6 @@ interface CountriesDao {
             insertCurrenciesAndLinkToCountry(currency, country.countryId)
         }
     }
-
     private suspend fun insertCurrenciesAndLinkToCountry(
         currency: Currency,
         countryId: String
@@ -68,8 +61,28 @@ interface CountriesDao {
     }
 
     @Transaction
+    suspend fun deleteAll() {
+        deleteCountries()
+        deleteCurrencies()
+        deleteCountryCurrencyCrossRef()
+    }
+
+    suspend fun getCountriesByName(name: String) =
+        getCountriesWithCurrenciesByName(name).map {
+            it.mapToModel()
+        }
+    @Transaction
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCountryCurrencyCrossRef(countryCurrencyCrossRef: ModelDao.CountryCurrencyCrossRef)
+
+    /**
+     * Select all countries from the countries table.
+     *
+     * @return all countries.
+     */
+    @Transaction
+    @Query("SELECT * FROM Countries")
+    fun getCountries(): Flow<List<Country>>
 
     /**
      * Insert a country in the database. If the country already exists, replace it.
@@ -145,27 +158,14 @@ interface CountriesDao {
     @Query("DELETE FROM CountryCurrencyCrossRef")
     suspend fun deleteCountryCurrencyCrossRef()
 
-    @Transaction
-    suspend fun deleteAll() {
-        deleteCountries()
-        deleteCurrencies()
-        deleteCountryCurrencyCrossRef()
-    }
-
     /**
      * Query se a Countries by name.
      * @param name the country name to be selecte
      * @return list of Country where the name is name.
      */
-    @Transaction // TODO
+    @Transaction
     @Query("SELECT * FROM Countries WHERE name = :name")
     suspend fun getCountryByName(name: String): List<CountryWithCurrencies>
-
-    @Transaction
-    suspend fun getCountriesByName(name: String) =
-        getCountriesWithCurrenciesByName(name).map {
-            it.mapToModel()
-        }
 
     /**
      * Query se a Countries by name.

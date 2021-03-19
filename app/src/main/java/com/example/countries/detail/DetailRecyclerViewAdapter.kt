@@ -13,8 +13,7 @@ import com.example.countries.data.business.model.Country
  * TODO: Replace the implementation with code for your data type.
  */
 class DetailRecyclerViewAdapter(
-    private var values: List<DetailItems> = emptyList(),
-    val onClick: (String) -> Unit = {}
+    private var values: List<String> = emptyList()
 ) : RecyclerView.Adapter<DetailRecyclerViewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -25,19 +24,18 @@ class DetailRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
-        holder.labelTextView.text = item.fieldLabel
-        holder.contentTextView.text = item.fieldValue
+        holder.labelTextView.text = item
     }
 
     override fun getItemCount(): Int = values.size
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val labelTextView: TextView = view.findViewById(R.id.contentLabel)
-        val contentTextView: TextView = view.findViewById(R.id.contentValue)
     }
 
-    fun updateList(list: List<DetailItems>) {
+    fun updateList(list: List<String>) {
         values = list
+        notifyDataSetChanged()
     }
 }
 

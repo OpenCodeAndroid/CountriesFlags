@@ -17,7 +17,6 @@ class ModelDao {
         var flag: String = ""
     )
 
-    // https://developer.android.com/training/data-storage/room/relationships
     data class CountryWithCurrencies @JvmOverloads constructor(
         @Embedded val countries: Country = Country(),
         @Relation(

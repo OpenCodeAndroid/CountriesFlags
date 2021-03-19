@@ -12,11 +12,11 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flow
 import timber.log.Timber
 
-abstract class NetworkComponentCase<T,R: Result<T>>(
+abstract class NetworkComponentCase<T, R : Result<T>>(
     private val networkObserver: NetworkObserver
 ) {
     private var oneRemoteSuccess: Boolean = false
-   abstract suspend fun getData(parameter: String, forceUpdate: Boolean):R
+    abstract suspend fun getData(parameter: String, forceUpdate: Boolean): R
 
     @FlowPreview
     @ExperimentalCoroutinesApi
@@ -34,7 +34,7 @@ abstract class NetworkComponentCase<T,R: Result<T>>(
             while (!oneRemoteSuccess) {
 
                 // But lets be sure that that gets updated with the data that is available
-                when (val result = getData(parameter,true)) {
+                when (val result = getData(parameter, true)) {
 
                     // If there was a error get that from network (we know that by the use of force true)
                     is Result.Error -> {
@@ -73,7 +73,7 @@ abstract class NetworkComponentCase<T,R: Result<T>>(
                     }
                 }
             }
-        }   .distinctUntilChanged()
+        }.distinctUntilChanged()
     }
 }
 

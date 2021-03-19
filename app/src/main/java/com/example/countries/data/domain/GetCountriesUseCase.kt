@@ -3,11 +3,25 @@ package com.example.countries.data.domain
 import com.example.countries.data.Result
 import com.example.countries.data.business.model.Country
 import com.example.countries.data.source.CountriesRepository
+import com.example.countries.data.source.network.NetworkObserver
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 
 class GetCountriesUseCase(
-    private val countriesRepository: CountriesRepository
+    private val countriesRepository: CountriesRepository,
+    private val networkObserver: NetworkObserver
 ) {
-    suspend operator fun invoke(forceUpdate: Boolean = false): Result<List<Country>> {
-        return countriesRepository.getCountries(forceUpdate)
+    @FlowPreview
+    @ExperimentalCoroutinesApi
+    suspend operator fun invoke(
+        forceUpdate: Boolean = false
+    ): Flow<Result<List<Country>>> {
+        return networkObserver.isConnectedFlow().debounce(100).map {
+            countriesRepository.getCountries(forceUpdate)
+        }.distinctUntilChanged()
     }
 }

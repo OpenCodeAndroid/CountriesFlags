@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.countries.data.Result
 import com.example.countries.data.business.model.Country
 import com.example.countries.data.domain.GetCountryUseCase
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class CountryDetailViewModel(val getCountryUseCase: GetCountryUseCase) : ViewModel() {
@@ -21,11 +22,13 @@ class CountryDetailViewModel(val getCountryUseCase: GetCountryUseCase) : ViewMod
     }
 
     private suspend fun handleResult(countryId: String) {
-        when (val result = getCountryUseCase.invoke(countryId)) {
-            is Result.Error -> TODO()
-            is Result.Loading -> TODO()
-            is Result.Success -> {
-                postIfValid(result)
+        getCountryUseCase.invoke(countryId).collect { result ->
+            when (result) {
+                is Result.Error -> TODO()
+                is Result.Loading -> TODO()
+                is Result.Success -> {
+                    postIfValid(result)
+                }
             }
         }
     }

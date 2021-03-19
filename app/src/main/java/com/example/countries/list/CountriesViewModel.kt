@@ -9,6 +9,7 @@ import com.example.countries.data.Result
 import com.example.countries.data.business.model.Country
 import com.example.countries.data.domain.GetCountriesUseCase
 import com.example.countries.data.domain.SearchCountriesUseCase
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class CountriesViewModel(
@@ -31,13 +32,14 @@ class CountriesViewModel(
 
     private fun loadAll() {
         viewModelScope.launch {
-
-            when (val result = getCountriesUseCase.invoke(false)) {
-                is Result.Error -> _showLoading.value = false
-                is Result.Loading -> _showLoading.value = true
-                is Result.Success -> {
-                    _dataCountries.value = result.data.filter { country -> !country.isEmpty }
-                    _showLoading.value = false
+            getCountriesUseCase.invoke(false).collect { result ->
+                when (result) {
+                    is Result.Error -> _showLoading.value = false
+                    is Result.Loading -> _showLoading.value = true
+                    is Result.Success -> {
+                        _dataCountries.value = result.data.filter { country -> !country.isEmpty }
+                        _showLoading.value = false
+                    }
                 }
             }
         }
@@ -65,14 +67,16 @@ class CountriesViewModel(
 
     private fun search(query: String) {
         viewModelScope.launch {
-            when (val result = searchCountriesUseCase.invoke(query, false)) {
-                is Result.Error ->
-                    _showLoading.value = false
-                is Result.Loading ->
-                    _showLoading.value = true
-                is Result.Success -> {
-                    _dataCountries.value = result.data.filter { country ->
-                        !country.isEmpty
+            searchCountriesUseCase.invoke(query, true).collect { result: Result<List<Country>> ->
+                when (result) {
+                    is Result.Error ->
+                        _showLoading.value = false
+                    is Result.Loading ->
+                        _showLoading.value = true
+                    is Result.Success -> {
+                        _dataCountries.value = result.data.filter { country ->
+                            !country.isEmpty
+                        }
                     }
                 }
             }

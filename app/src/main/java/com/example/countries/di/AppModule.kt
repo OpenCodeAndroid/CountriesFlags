@@ -10,6 +10,7 @@ import com.example.countries.data.source.DefaultCountriesRepository
 import com.example.countries.data.source.local.CountriesDatabase
 import com.example.countries.data.source.local.CountriesLocalDataSource
 import com.example.countries.data.source.network.ApiHelper
+import com.example.countries.data.source.network.NetworkObserver
 import com.example.countries.data.source.network.RemoteDataSource
 import com.example.countries.data.source.network.RetrofitBuilder
 import com.example.countries.detail.CountryDetailViewModel
@@ -29,6 +30,8 @@ object AppModule {
             RemoteDataSource(api = get())
         }
 
+        single { NetworkObserver(context = androidContext()) }
+
         // Local
         single(named<CountriesDatabase>()) { countriesDatabase() }
         single { get<CountriesDatabase>(named<CountriesDatabase>()).countryDao() }
@@ -46,8 +49,8 @@ object AppModule {
         }
 
         // UseCases
-        factory { GetCountriesUseCase(get()) }
-        factory { GetCountryUseCase(get()) }
+        factory { GetCountriesUseCase(get(), get()) }
+        factory { GetCountryUseCase(get(), get()) }
         factory { SearchCountriesUseCase(get()) }
 
         viewModel { CountryDetailViewModel(getCountryUseCase = get()) }
